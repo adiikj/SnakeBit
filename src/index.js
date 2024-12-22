@@ -1,26 +1,21 @@
 import dotenv from 'dotenv';
-import express from 'express';
 import connectDB from './db/index.js';
-import { app } from './app.js';
 
+// Load environment variables if not in production
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config({ path: './.env' });
 }
 
+// Connect to MongoDB
 connectDB()
-.then(()=>{
-    app.on("error",()=>{
-        console.log('Error:', error);
-        throw error
-    });
-    
-    app.listen(process.env.PORT || 8000,()=>{
-        console.log(`Server is running on port ${process.env.PORT}`);
-    });
+  .then(() => {
+    console.log('Connected to MongoDB successfully.');
+    // No need to call app.listen here; the server is started in server.js
+  })
+  .catch((error) => {
+    console.log('MongoDB connection error:', error);
+    process.exit(1); // Exit the process if DB connection fails
+  });
 
-})
-.catch((error)=>{
-    console.log('Error:', error);
-    throw error;
-})
-
+// Import server.js to start the app and socket server
+import './server.js';
