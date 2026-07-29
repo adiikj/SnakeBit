@@ -1,9 +1,10 @@
+import { Request, Response } from 'express';
 import Player from '../models/player.models.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 // Save the player's name (prevent duplicates)
-export const savePlayerName = asyncHandler(async (req, res) => {
+export const savePlayerName = asyncHandler(async (req: Request, res: Response) => {
   const { name } = req.body;
 
   if (!name) {
@@ -27,7 +28,7 @@ export const savePlayerName = asyncHandler(async (req, res) => {
   const player = new Player({ name, highScore: 0 });
   await player.save();
 
-  res.status(201).json(
+  return res.status(201).json(
     new ApiResponse(201, 'New player created successfully!', {
       name: player.name,
       highScore: player.highScore,
@@ -36,7 +37,7 @@ export const savePlayerName = asyncHandler(async (req, res) => {
 });
 
 // Get the player's name
-export const getPlayerName = asyncHandler(async (req, res) => {
+export const getPlayerName = asyncHandler(async (req: Request, res: Response) => {
   const { name } = req.params; // Get the player name from the route parameter
 
   const player = await Player.findOne({ name }); // Fetch the player by their name
@@ -44,11 +45,11 @@ export const getPlayerName = asyncHandler(async (req, res) => {
     return res.status(404).json(new ApiResponse(404, 'Player not found!')); // Return 404 if player doesn't exist
   }
 
-  res.status(200).json(new ApiResponse(200, 'Player retrieved successfully!', { name: player.name })); // Return player data
+  return res.status(200).json(new ApiResponse(200, 'Player retrieved successfully!', { name: player.name })); // Return player data
 });
 
 // Update high score for a player
-export const updateHighScore = asyncHandler(async (req, res) => {
+export const updateHighScore = asyncHandler(async (req: Request, res: Response) => {
   const { name, highScore } = req.body;
 
   if (!name || highScore === undefined) {
@@ -68,11 +69,13 @@ export const updateHighScore = asyncHandler(async (req, res) => {
       .json(new ApiResponse(200, 'High score updated successfully!', { highScore: player.highScore }));
   }
 
-  res.status(200).json(new ApiResponse(200, 'No update needed; high score remains unchanged.', { highScore: player.highScore }));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, 'No update needed; high score remains unchanged.', { highScore: player.highScore }));
 });
 
 // Get the high score for a player
-export const getHighScore = asyncHandler(async (req, res) => {
+export const getHighScore = asyncHandler(async (req: Request, res: Response) => {
   const { name } = req.params;
 
   if (!name) {
@@ -84,16 +87,20 @@ export const getHighScore = asyncHandler(async (req, res) => {
     return res.status(404).json(new ApiResponse(404, 'Player not found!'));
   }
 
-  res.status(200).json(new ApiResponse(200, 'High score retrieved successfully!', { highScore: player.highScore }));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, 'High score retrieved successfully!', { highScore: player.highScore }));
 });
 
-//get all players high score
-export const getAllHighScores = asyncHandler(async (req, res) => {
-  const players = await Player.find({ highScore: { $gt: 0 } }).sort({ highScore: -1 }).limit(10);
+// Get all players' high scores
+export const getAllHighScores = asyncHandler(async (req: Request, res: Response) => {
+  const players = await Player.find({ highScore: { $gt: 0 } })
+    .sort({ highScore: -1 })
+    .limit(10);
 
   if (!players) {
     return res.status(404).json(new ApiResponse(404, 'No players found!'));
   }
 
-  res.status(200).json(new ApiResponse(200, 'High scores retrieved successfully!', players));
+  return res.status(200).json(new ApiResponse(200, 'High scores retrieved successfully!', players));
 });

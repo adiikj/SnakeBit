@@ -1,10 +1,10 @@
 import http from 'http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
-import { app } from './app.js'; // Import your existing app
+import { app } from './app.js'; // Import the existing app
 
 // Load environment variables from .env file
-dotenv.config();  // This loads variables from .env into process.env
+dotenv.config(); // This loads variables from .env into process.env
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -12,7 +12,7 @@ const server = http.createServer(app);
 // Set up Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173', // Allow your frontend origin
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Allow the frontend origin
     methods: ['GET', 'POST'],
     credentials: true, // Allow credentials
   },
@@ -22,7 +22,7 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
-  socket.on('join-room', (roomCode) => {
+  socket.on('join-room', (roomCode: string) => {
     socket.join(roomCode);
     console.log(`User ${socket.id} joined room: ${roomCode}`);
 
@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
 });
 
 // Use environment variable for the port (from .env or default)
-const PORT = process.env.PORT;  // Fallback to 3000 if PORT is not defined in .env
+const PORT = process.env.PORT ?? 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
