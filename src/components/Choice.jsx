@@ -35,7 +35,7 @@ function Choice() {
                 </div>
               </Link>
               {/* Multiplayer Mode */}
-              <Link to="/multiplayer" className="relative group w-64 sm:w-72 md:w-80">
+              <Link to="/multiplayer/joinroom" className="relative group w-64 sm:w-72 md:w-80">
                 <div className="relative overflow-hidden rounded-lg transform transition-transform duration-300 group-hover:scale-110">
                   <img
                     src={multi}
