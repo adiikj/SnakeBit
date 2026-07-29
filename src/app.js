@@ -6,7 +6,7 @@ const app = express();
 
 // CORS setup
 const corsOptions = {
-  origin: "https://snakebitv2.vercel.app", // Allow only your frontend origin
+  origin: "http://localhost:5173", // Allow only your frontend origin
   credentials: true, // Allow credentials (cookies, authentication headers, etc.)
 };
 
