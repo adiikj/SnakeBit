@@ -34,7 +34,7 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full h-screen bg-green-600 font-arcade text-center flex justify-center items-center px-4 sm:px-8 md:px-16">
+    <div className="relative w-full h-screen bg-green-600 font-arcade text-center flex justify-center items-center px-4 sm:px-8 md:px-16">
       <div className="container mx-auto py-4">
         <h1 className="text-4xl sm:text-5xl md:text-6xl [word-spacing:10px] md:[word-spacing:25px] tracking-wider text-white font-bold">
           Welcome to SnakeBit!
@@ -63,6 +63,18 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      <p className="absolute bottom-4 w-full text-white text-xs sm:text-sm tracking-wider">
+        Designed and developed by{' '}
+        <a
+          href="https://adiikj.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-bold underline hover:text-green-900 transition-colors"
+        >
+          Aditya
+        </a>
+      </p>
     </div>
   );
 }
